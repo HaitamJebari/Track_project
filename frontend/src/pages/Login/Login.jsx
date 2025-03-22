@@ -1,31 +1,37 @@
 import "./Login.css";
 import { useState } from "react";
-import api from "../api";
+import api from "../../api";
 import { useNavigate } from "react-router-dom";
-import { ACCESS_TOKEN, REFRESH_TOKEN } from "../constants";
+import { ACCESS_TOKEN, REFRESH_TOKEN } from "../../constants";
+import Swal from 'sweetalert2'
+
 
 function Login({ route, method }) {
-  const [email, setEmail] = useState("");
+  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState("");
   const navigate = useNavigate();
-  const name = method === "Log In";
+  const name = method === "login";
 
   const handleSubmit = async (e) => {
     setLoading(true);
     e.preventDefault();
 
     try {
-      const res = await api.post(route, { email, password });
-      if (method === "Log In") {
+      const res = await api.post(route, { username, password });
+      if (method === "login") {
         localStorage.setItem(ACCESS_TOKEN, res.data.access);
         localStorage.setItem(REFRESH_TOKEN, res.data.refresh);
         navigate("/");
       } else {
         navigate("/login");
       }
-    } catch (error) {
-      alert(error);
+    } catch  {
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: "Something went wrong!",
+      });
     } finally {
       setLoading(false);
     }
@@ -37,13 +43,13 @@ function Login({ route, method }) {
           <div class="form-container sign-up"></div>
           <div class="form-container sign-in">
             <form onSubmit={handleSubmit}>
-              <h1>{name}</h1>
-              <span>use your email password</span>
+              <h1>Log In</h1>
+              <span>use your username password</span>
               <input
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="Email"
+                type="text"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+                placeholder="username"
               />
               <input
                 type="password"
