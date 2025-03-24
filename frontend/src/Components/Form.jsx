@@ -60,7 +60,7 @@ function Form({ route, method }) {
               placeholder="Password"
             />
             <button type="submit">
-              {name}
+              {loading ? "Loading..." : name}
             </button>
           </form>
         </div>
